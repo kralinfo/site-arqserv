@@ -438,12 +438,6 @@ const MoreProducts = () => {
       title: 'LancheGo',
       desc: 'A solução definitiva para cafeterias e lanchonetes. Pedidos ágeis, gestão de estoque em tempo real e integração com delivery.',
       tag: 'Food Tech'
-    },
-    {
-      icon: ShoppingCart,
-      title: 'Loja Virtual',
-      desc: 'E-commerce de alto desempenho com checkout otimizado, gestão de envios e integração com os maiores marketplaces.',
-      tag: 'E-commerce'
     }
   ];
 
@@ -462,6 +456,197 @@ const MoreProducts = () => {
           ))}
         </div>
       </div>
+    </section>
+  );
+};
+
+const StoreSection = () => {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  const slides = [
+    { src: '/store/store-1.png', title: 'Página Inicial - Destaques' },
+    { src: '/store/store-2.png', title: 'Visualização de Produto' },
+    { src: '/store/store-3.png', title: 'Página de Contato' }
+  ];
+
+  const nextSlide = () => setActiveSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
+
+  useEffect(() => {
+    if (!isZoomed) {
+      const timer = setInterval(nextSlide, 5000);
+      return () => clearInterval(timer);
+    }
+  }, [isZoomed]);
+
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') setIsZoomed(false);
+    };
+    if (isZoomed) window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isZoomed]);
+
+  return (
+    <section id="loja-virtual" className="relative overflow-hidden pt-20 bg-glass/5">
+      <div className="container">
+        <div className="grid md:grid-cols-2 gap-16 items-center flex-row-reverse">
+          {/* Text Column - Now on the right to alternate with ArqServ */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="md:order-2"
+          >
+            <div className="flex items-center gap-4 mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/20">
+                <ShoppingCart size={16} className="text-secondary" />
+                <span className="text-sm font-medium text-secondary">Venda Online 24/7</span>
+              </div>
+            </div>
+
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Sua <span className="text-secondary">Loja Virtual</span> de Alta Conversão
+            </h2>
+            <p className="text-xl text-text-muted mb-8">
+              Desenvolvemos e-commerces focados em experiência de compra, velocidade e resultados. Uma plataforma robusta que escala conforme seu negócio cresce.
+            </p>
+
+            <div className="space-y-6 mb-10">
+              {[
+                { icon: ShoppingBag, title: 'Checkout Otimizado', desc: 'Reduza o abandono de carrinho com um processo de compra fluido em apenas 2 cliques.' },
+                { icon: Layout, title: 'Design Exclusivo', desc: 'Interface personalizada que transmite a identidade da sua marca e confiança ao cliente.' },
+                { icon: BarChart3, title: 'Gestão Inteligente', desc: 'Controle de estoque, vendas e relatórios em um painel administrativo poderoso.' }
+              ].map((item, idx) => (
+                <div key={idx} className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-glass border border-glass-border rounded-xl flex items-center justify-center">
+                    <item.icon size={24} className="text-secondary" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold mb-1">{item.title}</h4>
+                    <p className="text-text-muted">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <a href="https://wa.me/5581997307312" target="_blank" rel="noopener noreferrer" className="btn btn-primary px-8">
+              Criar Minha Loja
+            </a>
+          </motion.div>
+
+          {/* Carousel Column */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative group md:order-1"
+          >
+            <div className="flex justify-center mb-12">
+              <div className="flex items-center gap-3">
+                <Store size={60} className="text-secondary" />
+                <span className="text-4xl font-bold tracking-tighter">Ismael Modas</span>
+              </div>
+            </div>
+
+            <div
+              className="relative z-10 glass-card p-4 rounded-3xl shadow-2xl overflow-hidden border-2 border-secondary/20 bg-background/50 cursor-zoom-in"
+              onClick={() => setIsZoomed(true)}
+            >
+              <div className="relative aspect-[16/10] overflow-hidden rounded-2xl">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={activeSlide}
+                    src={slides[activeSlide].src}
+                    alt={slides[activeSlide].title}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    transition={{ duration: 0.5 }}
+                    className="w-full h-full object-cover"
+                  />
+                </AnimatePresence>
+
+                <button
+                  onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-secondary hover:scale-110 transition-all z-20"
+                >
+                  <ChevronLeft size={28} />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-secondary hover:scale-110 transition-all z-20"
+                >
+                  <ChevronRight size={28} />
+                </button>
+              </div>
+
+              <div className="flex justify-center gap-2 mt-4">
+                {slides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={(e) => { e.stopPropagation(); setActiveSlide(idx); }}
+                    className={`h-1.5 rounded-full transition-all ${idx === activeSlide ? 'w-8 bg-secondary' : 'w-2 bg-glass-border hover:bg-white/30'}`}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-secondary/10 rounded-full blur-[100px] -z-10" />
+          </motion.div>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {isZoomed && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-background/95 backdrop-blur-2xl flex items-center justify-center p-4 md:p-12"
+            onClick={() => setIsZoomed(false)}
+          >
+            <motion.button
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="absolute top-8 right-8 text-text-main hover:text-secondary transition-colors z-[210] p-2 rounded-full hover:bg-white/10"
+            >
+              <X size={40} />
+            </motion.button>
+
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-[90vw] max-h-[85vh] flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={slides[activeSlide].src}
+                alt={slides[activeSlide].title}
+                className="max-w-full max-h-full object-contain rounded-xl shadow-2xl border border-glass-border"
+              />
+
+              <button
+                onClick={() => prevSlide()}
+                className="absolute left-[-2rem] lg:left-[-6rem] top-1/2 -translate-y-1/2 w-14 h-24 rounded-2xl bg-background/80 backdrop-blur-xl border border-glass-border flex items-center justify-center text-secondary shadow-2xl hover:bg-secondary/20 hover:scale-105 transition-all z-[220]"
+                style={{ left: '-5rem' }}
+              >
+                <ChevronLeft size={44} strokeWidth={2.5} />
+              </button>
+              <button
+                onClick={() => nextSlide()}
+                className="absolute right-[-2rem] lg:left-[-6rem] top-1/2 -translate-y-1/2 w-14 h-24 rounded-2xl bg-background/80 backdrop-blur-xl border border-glass-border flex items-center justify-center text-secondary shadow-2xl hover:bg-secondary/20 hover:scale-105 transition-all z-[220]"
+                style={{ right: '-5rem' }}
+              >
+                <ChevronRight size={44} strokeWidth={2.5} />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
@@ -518,6 +703,7 @@ const App = () => {
       <Hero />
       <Services />
       <ArqServSection />
+      <StoreSection />
       <MoreProducts />
       <CTA />
       <Footer />
